@@ -3,42 +3,40 @@ import pyttsx3
 
 
 def hadoop():
-
+    #install hadoop
     if (("install" in p)or("download" in p)) and ("hadoop" in p):
 	pyttsx3.speak('Installing Hadoop')
-	os.system("rpm -i hadoop-1.2.1-1.x86_64.rpm --force")
-	pyttsx3.speak('Successfully installed')
-	print("Successfully installed")
-
-    elif (("install" in p)or("download" in p)) and ("java" in p):
-	pyttsx3.speak('Installing java')
-	os.system("rpm -i jdk-8u171-linux-x64.rpm")
+	os.system("wget http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.rpm;rpm -i jdk-8u171-linux-x64.rpm")
+	os.system("wget https://archive.apache.org/dist/hadoop/core/hadoop-1.2.1/hadoop-1.2.1-1.x86_64.rpm;rpm -i hadoop-1.2.1-1.x86_64.rpm --force")
 	pyttsx3.speak('Successfully installed')
 	print("Successfully installed")
 
     #Namenode configuration
     elif ("configure" in p) and (("hadoop" in p)or("masternode" in p)or("namenode" in p)):
 	#check wheather required softwares are installed or not
-	p=os.system("which hadoop")
-	q=os.system("which java")
-	if(p!=0):
+	j=os.system("which java")
+	h=os.system("which hadoop")
+	
+	if(j!=0):
+		print("Error: Java not found")
+		ans=input("Do you want to install jdk[Y/N]: ")
+		if(ans=="Y"):
+			os.system("wget http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.rpm;rpm -i jdk-8u171-linux-x64.rpm")
+		else:
+			print("Ending.....")
+			exit()
+	
+	if(h!=0):
 		print("Error: Hadoop not found")
 		pyttsx3.speak('Hadoop not found')
 		ans=input("Do you want to install hadoop[Y/N]: ")
 		pyttsx3.speak('Do you want to install hadoop')
 		if(ans=="Y"):
-			os.system("rpm -i hadoop-1.2.1-1.x86_64.rpm --force")
+			os.system("wget https://archive.apache.org/dist/hadoop/core/hadoop-1.2.1/hadoop-1.2.1-1.x86_64.rpm;rpm -i hadoop-1.2.1-1.x86_64.rpm --force")
 		else:
 			print("Ending.....")
 			exit()
-	if(q!=0):
-		print("Error: Java not found")
-		ans=input("Do you want to install jdk[Y/N]: ")
-		if(ans=="Y"):
-			os.system("rpm -i jdk-8u171-linux-x64.rpm")
-		else:
-			print("Ending.....")
-			exit()
+	
 
 	master_ip=input("Enter the ip address of MasterNode/NameNode: ")
 	pyttsx3.speak('configuring master node')
